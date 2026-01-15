@@ -1,0 +1,19 @@
+# Fraud Risk Mini-Platform
+
+End-to-end fraud risk scoring project (Data Engineering + ML + API).
+
+## Goal
+Build a reproducible fraud risk system with:
+- data ingestion
+- analytics tables
+- ML model
+- FastAPI scoring service
+- Docker and CI
+
+## Project status
+- [x] Sprint 0 — setup
+- [ ] Sprint 1 — ingestion
+
+## How to run (Sprint 0)
+```bash
+docker compose up
