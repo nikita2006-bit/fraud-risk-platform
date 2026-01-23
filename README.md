@@ -13,6 +13,7 @@ Build a reproducible fraud risk system with:
 ## Project status
 - [x] Sprint 0 — setup
 - [x] Sprint 1 — ingestion
+- [x] Sprint 2 — Analytics tables
 
 ## How to run (Sprint 0)
 ```bash
