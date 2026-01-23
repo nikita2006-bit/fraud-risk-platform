@@ -37,11 +37,42 @@ COPY raw.transactions_raw ({cols})
 FROM STDIN WITH CSV
 """
 
+copy_to_staging = f"""
+COPY raw.transactions_staging ({cols})
+FROM STDIN WITH CSV
+"""
+
+merge_sql = f"""
+INSERT INTO raw.transactions_raw ({cols})
+SELECT {cols}
+FROM raw.transactions_staging
+ON CONFLICT ON CONSTRAINT uq_transaction_natural DO NOTHING
+"""
+
+
 with conn.cursor() as c:
-    c.copy_expert(copy_query, sio)
+    c.execute("TRUNCATE raw.transactions_staging;")
+    c.copy_expert(copy_to_staging, sio)
+
+    c.execute("SELECT COUNT(*) FROM raw.transactions_staging;")
+    staged = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM raw.transactions_raw;")
+    raw_before = c.fetchone()[0]
+
+    c.execute(merge_sql)
+
+    c.execute("SELECT COUNT(*) FROM raw.transactions_raw;")
+    raw_after = c.fetchone()[0]
+
+
     conn.commit()
 
-
+inserted = raw_after - raw_before
+duplicates = staged - inserted
+print("staged:", staged, "\n",
+      "inserded:", inserted, "\n",
+      "duplicates: ", duplicates)
 
 
 
