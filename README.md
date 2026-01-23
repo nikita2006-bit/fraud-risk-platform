@@ -12,8 +12,5 @@ Build a reproducible fraud risk system with:
 
 ## Project status
 - [x] Sprint 0 — setup
-- [ ] Sprint 1 — ingestion
-
-## How to run (Sprint 0)
-```bash
-docker compose up
+- [x] Sprint 1 — ingestion
+- [x] Sprint 2 — Analytics tables
