@@ -4,7 +4,9 @@ CREATE OR REPLACE VIEW mart.mart_daily_stats AS
             step / 24 AS txn_date,
             COUNT(*) AS txn_count,
             SUM(CASE WHEN isFraud THEN 1 ELSE 0 END) AS fraud_count
-        FROM raw.transactions_raw
+        FROM raw.transactions_raw t
+        LEFT JOIN dq.failures f ON t.transaction_id = f.transaction_id
+        WHERE f.transaction_id IS NULL
         GROUP BY step / 24
     )
     SELECT 
@@ -22,7 +24,9 @@ CREATE OR REPLACE VIEW mart.mart_type_stats AS
             COUNT(*) AS txn_count,
             SUM(CASE WHEN isFraud THEN 1 ELSE 0 END) AS fraud_count,
             SUM(amount) AS total_amount
-        FROM raw.transactions_raw
+        FROM raw.transactions_raw t
+        LEFT JOIN dq.failures f ON t.transaction_id = f.transaction_id
+        WHERE f.transaction_id IS NULL
         GROUP BY type
     )
     SELECT 
@@ -47,4 +51,6 @@ SELECT
   SUM(amount) OVER (PARTITION BY nameOrig ORDER BY step
             RANGE BETWEEN 168 PRECEDING AND CURRENT ROW) AS total_amount_7d
 
-FROM raw.transactions_raw;
+FROM raw.transactions_raw t
+    LEFT JOIN dq.failures f ON t.transaction_id = f.transaction_id
+        WHERE f.transaction_id IS NULL;

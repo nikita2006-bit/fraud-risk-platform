@@ -2,10 +2,13 @@ import pandas as pd
 import psycopg2
 import uuid
 from io import StringIO
+import os
+from dotenv import load_dotenv
 
 
 
-file = pd.read_csv('PS_20174392719_1491204439457_log.csv')
+
+file = pd.read_csv(r'data\raw\PS_20174392719_1491204439457_log.csv')
 
 df = pd.DataFrame(file)
 df.insert(0, 
@@ -16,12 +19,14 @@ df.insert(0,
 
 print(df.head(5))
 
+
+load_dotenv()
 conn = psycopg2.connect(
-    host='127.0.0.1',
-    user='postgres',
-    password='postgres',
-    port='5433',
-    dbname='fraud'
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("POSTGRES_USER"),
+    password=os.getenv("POSTGRES_PASSWORD"),
+    port=os.getenv("DB_PORT"),
+    dbname=os.getenv("POSTGRES_DB")
 )
 
 
