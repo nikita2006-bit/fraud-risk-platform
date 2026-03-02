@@ -12,7 +12,31 @@ services:
     volumes:
      - db:/var/lib/postgresql/data
      - ./sql:/docker-entrypoint-initdb.d:ro
-
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: fraud-api
+    restart: always
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MODEL_PATH: /app/ml/artifacts/fraud_pipeline.pkl
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app/api
+  ui:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile.ui
+    environment:
+      - FRAUD_API_URL=http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    volumes:
+      - ./ui:/app/ui
 volumes:
   db:
     driver: local

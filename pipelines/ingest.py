@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 
 
-file = pd.read_csv(r'data\raw\PS_20174392719_1491204439457_log.csv')
+file = pd.read_csv(r'C:\Users\nikita\Documents\Fraud_Risk_Project\train.csv')
 
 df = pd.DataFrame(file)
 df.insert(0, 

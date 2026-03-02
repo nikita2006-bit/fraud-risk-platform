@@ -8,3 +8,5 @@ venv/
 
 
 ml/artifacts/
+
+api/__pycache__

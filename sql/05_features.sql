@@ -1,7 +1,42 @@
 CREATE SCHEMA IF NOT EXISTS ml;
 DROP TABLE IF EXISTS ml.ml_features;
 
-CREATE TABLE ml.ml_features AS
+CREATE TABLE ml.ml_features (
+  transaction_id text PRIMARY KEY,
+  account_id text,
+  counterparty_id text,
+  amount double precision,
+  type text,
+  event_time timestamp,
+  isfraud boolean,
+  is_flagged_fraud boolean,
+  txn_count_1h bigint,
+  txn_count_24h bigint,
+  txn_count_7d bigint,
+  sum_amount_24h double precision,
+  sum_amount_7d double precision,
+  velocity_10m bigint,
+  cash_out_ratio_7d double precision,
+  transfer_ratio_7d double precision,
+  seconds_since_prev_txn double precision,
+  avg_amount_24h double precision,
+  std_amount_7d double precision,
+  max_amount_7d double precision,
+  amount_zscore_7d double precision,
+  amount_to_sum_24h_ratio double precision,
+  pair_txn_cnt_7d bigint,
+  dest_incoming_cnt_7d bigint
+);
+
+
+INSERT INTO ml.ml_features (
+  transaction_id, account_id, counterparty_id, amount, type, event_time,
+  isfraud, is_flagged_fraud, txn_count_1h, txn_count_24h, txn_count_7d,
+  sum_amount_24h, sum_amount_7d, velocity_10m, cash_out_ratio_7d,
+  transfer_ratio_7d, seconds_since_prev_txn, avg_amount_24h, std_amount_7d,
+  max_amount_7d, amount_zscore_7d, amount_to_sum_24h_ratio,
+  pair_txn_cnt_7d, dest_incoming_cnt_7d
+)
 WITH clean_tx AS (
     SELECT t.*
     FROM raw.transactions_raw t
